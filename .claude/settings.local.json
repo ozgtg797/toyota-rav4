@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@14 . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes 2>&1 | tail -20)",
+      "Bash(npx create-next-app@14 . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes --force 2>&1 | tail -30)",
+      "Bash(mkdir -p /tmp/rav4-scaffold && cd /tmp/rav4-scaffold && npx create-next-app@14 . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes 2>&1 | tail -20)",
+      "Bash(cp -r /tmp/rav4-scaffold/. /Users/ozg/Desktop/vibecoding/projects/toyota-rav4/ 2>&1 && echo \"Copied successfully\")",
+      "Bash(npm install @supabase/supabase-js @supabase/ssr @anthropic-ai/sdk pdf-parse json5 2>&1 | tail -10)",
+      "Bash(npm install pdfjs-dist canvas 2>&1 | tail -10)",
+      "Bash(npm install -D @types/pdf-parse ts-node 2>&1 | tail -5)",
+      "Bash(npx tsc --noEmit 2>&1 | head -60)",
+      "Bash(./node_modules/.bin/tsc --noEmit 2>&1 | head -80)",
+      "Bash(ls node_modules/typescript/lib/tsc.js 2>/dev/null || echo \"missing\"; npm ls typescript 2>&1 | head -5)",
+      "Bash(node node_modules/typescript/lib/tsc.js --noEmit 2>&1 | head -80)",
+      "Bash(node node_modules/typescript/lib/tsc.js --noEmit 2>&1 | grep -v \"node_modules\" | head -40)",
+      "Bash(node node_modules/typescript/lib/tsc.js --noEmit 2>&1 | grep -v \"node_modules\" | head -30)",
+      "Bash(npm run build 2>&1 | tail -30)",
+      "Bash(node /Users/ozg/Desktop/vibecoding/projects/toyota-rav4/node_modules/next/dist/bin/next build 2>&1 | tail -40)",
+      "Bash(node /Users/ozg/Desktop/vibecoding/projects/toyota-rav4/node_modules/next/dist/bin/next build 2>&1 | tail -20)",
+      "Bash(git add -A && git commit -m \"Initial implementation: Toyota RAV4 1997 maintenance tutorial web app\" 2>&1)"
+    ]
+  }
+}

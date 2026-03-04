@@ -7,21 +7,101 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* ============================================================
+   PRINT STYLES — optimized for garage use
+   ============================================================ */
+@media print {
+  /* Hide interactive UI */
+  nav,
+  .print-button,
+  .lightbox,
+  button,
+  [role="button"] {
+    display: none !important;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 1cm;
+    size: letter portrait;
+  }
+
+  body {
+    font-size: 11pt;
+    color: black;
+    background: white;
+  }
+
+  /* Step cards */
+  .step-card {
+    break-inside: avoid;
+    border: 1pt solid #ccc !important;
+    margin-bottom: 12pt;
+    padding: 8pt;
+    box-shadow: none !important;
+  }
+
+  /* Large step numbers for greasy-hands readability */
+  .step-number {
+    font-size: 24pt !important;
+    font-weight: bold;
+    width: 40pt !important;
+    height: 40pt !important;
+  }
+
+  /* Torque specs — prominent boxed display */
+  .torque-spec {
+    border: 2pt solid black !important;
+    padding: 4pt 8pt;
+    font-weight: bold;
+  }
+
+  /* Warnings keep color coding */
+  .warning-danger {
+    border-left: 4pt solid red !important;
+    background: #fff5f5 !important;
+  }
+
+  .warning-caution {
+    border-left: 4pt solid orange !important;
+    background: #fffbeb !important;
+  }
+
+  /* Diagrams: full width, avoid page breaks */
+  .diagram-image {
+    width: 100% !important;
+    max-height: 60vh;
+    object-fit: contain;
+    break-inside: avoid;
+    display: block;
+  }
+
+  /* Sources collapsed by default in print — expand */
+  details,
+  [data-state="closed"] {
+    display: block !important;
+  }
+
+  /* Header */
+  h1 {
+    font-size: 18pt;
+  }
+  h2 {
+    font-size: 14pt;
+  }
+  h3 {
+    font-size: 12pt;
   }
 }
