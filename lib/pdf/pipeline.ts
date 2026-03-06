@@ -67,10 +67,15 @@ export async function processPDF(documentId: string): Promise<PipelineResult> {
       }
     }
 
-    // 8. Render pages and upload to Supabase Storage
+    // 8. Render pages and upload to Supabase Storage (optional — skip if pdfjs fails)
     let pagesRendered = 0
     if (pagesToRender.size > 0) {
-      const rendered = await renderPages(buffer, Array.from(pagesToRender))
+      let rendered: Awaited<ReturnType<typeof renderPages>> = []
+      try {
+        rendered = await renderPages(buffer, Array.from(pagesToRender))
+      } catch (renderErr) {
+        console.warn('Page rendering skipped (pdfjs error):', renderErr instanceof Error ? renderErr.message : String(renderErr))
+      }
 
       for (const page of rendered) {
         const storagePath = `${documentId}/${page.pageNumber}.jpg`

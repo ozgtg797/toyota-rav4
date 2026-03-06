@@ -13,11 +13,21 @@ export async function renderPage(
   pageNumber: number,
   dpi = 150
 ): Promise<RenderedPage> {
-  // Dynamic import to avoid issues with pdfjs-dist ESM in CJS context
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const pdfjs = require('pdfjs-dist/legacy/build/pdf.js')
+
+  // Disable worker for Node.js
+  pdfjs.GlobalWorkerOptions.workerSrc = ''
 
   const data = new Uint8Array(pdfBuffer)
-  const loadingTask = pdfjs.getDocument({ data, disableStream: true, disableAutoFetch: true })
+  const loadingTask = pdfjs.getDocument({
+    data,
+    disableStream: true,
+    disableAutoFetch: true,
+    useWorkerFetch: false,
+    isEvalSupported: false,
+    useSystemFonts: true,
+  })
   const pdfDoc = await loadingTask.promise
 
   const page = await pdfDoc.getPage(pageNumber)

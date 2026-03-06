@@ -14,10 +14,11 @@
     "@supabase/ssr": "^0.9.0",
     "@supabase/supabase-js": "^2.98.0",
     "canvas": "^3.2.1",
+    "dotenv": "^17.3.1",
     "json5": "^2.2.3",
     "next": "14.2.35",
     "pdf-parse": "^2.4.5",
-    "pdfjs-dist": "^5.5.207",
+    "pdfjs-dist": "^4.4.168",
     "react": "^18",
     "react-dom": "^18"
   },

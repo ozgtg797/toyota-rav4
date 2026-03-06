@@ -1,14 +1,19 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "noEmit": false,
+    "resolveJsonModule": true,
     "outDir": ".scripts-out",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "downlevelIteration": true
   },
-  "include": ["scripts/**/*.ts"]
+  "include": ["scripts/**/*.ts", "lib/**/*.ts"]
 }
