@@ -49,6 +49,7 @@ export async function generateTutorial(
     if (chunk.documents?.anthropic_file_id && pages <= 100 && !docsWithFiles.has(chunk.document_id)) {
       docsWithFiles.set(chunk.document_id, chunk.documents.anthropic_file_id)
     }
+    if (docsWithFiles.size >= 3) break // Max 3 PDFs to stay within token limit
   }
 
   const hasFiles = docsWithFiles.size > 0
