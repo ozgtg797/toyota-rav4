@@ -35,10 +35,18 @@ export async function generateTutorial(
   const anthropic = getAnthropicClient()
   const supabase = createAdminClient()
 
-  // Get unique documents with anthropic_file_id
+  // Get unique documents with anthropic_file_id and page_count ≤ 100 (Anthropic Files API limit)
+  const docPageCounts = new Map<string, number>()
+  const { data: docRows } = await supabase
+    .from('documents')
+    .select('id, page_count')
+    .in('id', [...new Set(chunks.map(c => c.document_id))])
+  for (const d of docRows || []) docPageCounts.set(d.id, d.page_count || 999)
+
   const docsWithFiles = new Map<string, string>()
   for (const chunk of chunks) {
-    if (chunk.documents?.anthropic_file_id && !docsWithFiles.has(chunk.document_id)) {
+    const pages = docPageCounts.get(chunk.document_id) ?? 999
+    if (chunk.documents?.anthropic_file_id && pages <= 100 && !docsWithFiles.has(chunk.document_id)) {
       docsWithFiles.set(chunk.document_id, chunk.documents.anthropic_file_id)
     }
   }

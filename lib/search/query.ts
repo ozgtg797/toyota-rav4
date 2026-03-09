@@ -51,5 +51,34 @@ export async function searchChunks(
 
   if (error) throw new Error(`Search failed: ${error.message}`)
 
-  return (data || []) as ChunkWithDocument[]
+  // Also run a secondary search with manual-style synonyms to catch lubrication sections
+  // (Toyota FSMs use "drain/refill/lubrication" not "change")
+  const words = query.toLowerCase().split(' ')
+  const manualTerms: string[] = []
+  if (words.some(w => ['oil', 'lube', 'lubrication'].includes(w))) manualTerms.push('lubrication drain refill')
+  if (words.some(w => ['brake', 'brakes'].includes(w))) manualTerms.push('brake fluid bleeding')
+  if (words.some(w => ['coolant', 'antifreeze', 'cooling'].includes(w))) manualTerms.push('coolant drain fill')
+  if (words.some(w => ['spark', 'plug', 'plugs'].includes(w))) manualTerms.push('spark plug replacement')
+
+  let secondary: ChunkWithDocument[] = []
+  if (manualTerms.length > 0) {
+    const { data: data2 } = await supabase
+      .from('chunks')
+      .select('*, documents(display_name, anthropic_file_id)')
+      .textSearch('search_vector', manualTerms.join(' OR '), { type: 'websearch', config: 'english' })
+      .limit(limit)
+    secondary = (data2 || []) as ChunkWithDocument[]
+  }
+
+  // Merge and deduplicate by chunk id, primary results first
+  const seen = new Set<string>()
+  const merged: ChunkWithDocument[] = []
+  for (const chunk of [...(data || []), ...secondary]) {
+    if (!seen.has(chunk.id)) {
+      seen.add(chunk.id)
+      merged.push(chunk)
+    }
+  }
+
+  return merged.slice(0, limit)
 }
