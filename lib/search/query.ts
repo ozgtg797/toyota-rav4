@@ -18,9 +18,12 @@ Output ONLY the terms, nothing else.`,
     ],
   })
 
-  const expanded = response.content[0].type === 'text' ? response.content[0].text.trim() : query
-  // Combine original query with expanded terms as OR search
-  return `${query} ${expanded}`
+  const raw = response.content[0].type === 'text' ? response.content[0].text : query
+  // Strip quotes, newlines, special chars — keep only plain words
+  const expanded = raw.replace(/["\n\r]/g, ' ').replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, ' ').trim()
+  // Use OR between original query and each expanded term for broader recall
+  const extraTerms = expanded.split(' ').filter(t => t.length > 3).slice(0, 6).join(' OR ')
+  return extraTerms ? `${query} OR ${extraTerms}` : query
 }
 
 export async function searchChunks(
